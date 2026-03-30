@@ -1,0 +1,136 @@
+# Model Ensemble Configuration (Project APE)
+# Reference: Project APE uses 11 models from 7 providers
+
+# Primary Models (Main reasoning and generation)
+primary:
+  default:
+    model: claude-sonnet-4
+    temperature: 0.7
+    use_for:
+      - general_reasoning
+      - theory_generation
+      - paper_writing
+  
+  high_stakes:
+    model: claude-opus-4
+    temperature: 0.3
+    use_for:
+      - complex_derivations
+      - final_review
+      - submission_prep
+
+# Specialized Models (Task-specific)
+specialized:
+  code_generation:
+    model: claude-sonnet-4
+    temperature: 0.2
+    use_for:
+      - r_scripts
+      - python_scripts
+      - stata_code
+  
+  code_review:
+    model: claude-sonnet-4
+    temperature: 0.1
+    use_for:
+      - static_analysis
+      - bug_detection
+      - reproducibility_check
+
+  mathematical_audit:
+    model: claude-opus-4
+    temperature: 0.1
+    use_for:
+      - derivation_verification
+      - proof_checking
+      - equation_validation
+
+# Evaluation Models (For tournament and review)
+evaluation:
+  tournament_judge:
+    model: claude-sonnet-4
+    temperature: 0.3
+    use_for:
+      - head_to_head_comparison
+      - paper_ranking
+    notes: "Use position-swapping to control bias"
+  
+  simulated_referee:
+    model: claude-opus-4
+    temperature: 0.3
+    use_for:
+      - manuscript_review
+      - theory_evaluation
+      - quality_scoring
+
+# Task-Model Mapping
+task_routing:
+  # Theory generation tasks
+  theory_evolution_random:
+    model: primary.default
+    persona: random
+  
+  theory_evolution_mutate:
+    model: primary.default
+    context: include_parent_and_feedback
+  
+  theory_evolution_crossover:
+    model: primary.high_stakes
+    context: include_both_parents
+  
+  # Verification tasks
+  math_audit:
+    model: specialized.mathematical_audit
+    max_rounds: 2
+  
+  code_review:
+    model: specialized.code_review
+    checks: [syntax, reproducibility, patterns]
+  
+  # Evaluation tasks
+  tournament_match:
+    model: evaluation.tournament_judge
+    rounds: 2
+    position_swap: true
+  
+  referee_review:
+    model: evaluation.simulated_referee
+    dimensions: [fit, plausibility, parsimony]
+
+# Cost Optimization
+cost_tiers:
+  tier_1_cheap:  # Use for simple tasks
+    - code_review
+    - proofreading
+    - formatting
+  
+  tier_2_medium:  # Use for moderate complexity
+    - theory_generation
+    - tournament_judge
+    - data_analysis
+  
+  tier_3_expensive:  # Use sparingly
+    - math_audit
+    - simulated_referee
+    - complex_translation
+
+# Quality-Cost Tradeoff
+# Rule: Use cheapest model that achieves quality threshold
+quality_thresholds:
+  commit: 80
+  pr: 90
+  publication: 95
+
+# Model Selection Algorithm
+selection_rules:
+  - if: task.complexity == "low"
+    then: tier_1_cheap
+  
+  - if: task.complexity == "medium"
+    then: tier_2_medium
+  
+  - if: task.complexity == "high" OR task.stakes == "high"
+    then: tier_3_expensive
+  
+  - if: previous_score < quality_threshold
+    then: upgrade_tier

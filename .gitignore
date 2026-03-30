@@ -1,0 +1,71 @@
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# IDE
+.idea/
+*.swp
+*.swo
+*~
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+env/
+venv/
+.venv/
+
+# R
+.Rhistory
+.Rdata
+.RData
+.Ruserdata
+*.Rproj.user
+
+# LaTeX
+*.aux
+*.bbl
+*.blg
+*.log
+*.out
+*.toc
+*.synctex.gz
+*.fdb_latexmk
+*.fls
+*.nav
+*.snm
+*.vrb
+
+# Data files (add specific data files you want to ignore)
+# *.csv
+# *.xlsx
+# data/raw/
+
+# Sensitive files
+.env
+*.pem
+credentials.json
+secrets.yaml
+
+# Large files
+*.pdf
+!README.pdf
+
+# Temporary files
+*.tmp
+*.temp
+.cache/
+
+# Template repository (can remove after setup)
+workflow-template/
+
+# Local overrides
+AGENTS.local.md
+.cursor/settings.local.json
