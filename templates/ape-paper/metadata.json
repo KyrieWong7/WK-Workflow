@@ -1,0 +1,45 @@
+{
+  "paper_id": "paper_XXXX_v1",
+  "title": "Paper Title",
+  "method": "DiD",
+  "policy_id": null,
+  "contributor": "username",
+  "contributors": ["username"],
+  "authoring_model": null,
+  "published_at": null,
+  "version": 1,
+  "paper_family_id": "paper_XXXX",
+  "parent_paper_id": null,
+  "is_revision": false,
+  "is_polish": false,
+  "api_usage": {
+    "total_cost_usd": 0.0,
+    "total_tokens_in": 0,
+    "total_tokens_out": 0,
+    "cost_breakdown": {}
+  },
+  "review_status": {
+    "advisor_review": null,
+    "theory_review": null,
+    "exhibit_review": null,
+    "prose_review": null,
+    "referee_reviews": [],
+    "revision_count": 0
+  },
+  "tournament": {
+    "matches_played": 0,
+    "wins": 0,
+    "losses": 0,
+    "ties": 0,
+    "trueskill_mu": 25.0,
+    "trueskill_sigma": 8.333,
+    "conservative_rating": 0.0,
+    "elo": 1500
+  },
+  "integrity": {
+    "code_scan_status": null,
+    "replication_status": null,
+    "issues_flagged": [],
+    "errors_flagged": []
+  }
+}

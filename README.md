@@ -121,7 +121,7 @@
 
 ```
 WK-Workflow/
-├── AGENTS.md                    # 项目宪法
+├── AGENTS.md                    # 项目宪法 (v3.0)
 ├── MEMORY.md                    # 跨会话记忆
 ├── README.md                    # 本文件
 ├── .cursor/
@@ -130,26 +130,49 @@ WK-Workflow/
 │   │   ├── orchestrator-protocol.md
 │   │   ├── quality-gates.md
 │   │   └── session-logging.md
-│   ├── skills/                  # 技能 (11个)
+│   ├── skills/                  # 技能 (15个+)
+│   │   │                        # === AutoTheory Skills ===
+│   │   ├── problem-analyzer/    # 问题分析 (A.1)
+│   │   ├── theory-evolution/    # 理论进化 (A.2)
+│   │   ├── scorer/              # 评分系统 (A.10)
+│   │   ├── evaluator/           # 评估器 (A.9)
+│   │   ├── pipeline-orchestrator/ # 流水线协调 (C)
+│   │   ├── expert-personas/     # 专家人格
+│   │   │                        # === APE Skills ===
+│   │   ├── ape-review-process/  # 6阶段审稿流程
+│   │   ├── tournament/          # TrueSkill 锦标赛
+│   │   ├── integrity-check/     # 代码完整性检查
+│   │   │                        # === Core Skills ===
 │   │   ├── data-analysis/       # 数据分析
 │   │   ├── lit-review/          # 文献综述
 │   │   ├── review-paper/        # 论文评审
-│   │   ├── proofread/           # 校对
-│   │   ├── commit/              # 提交
-│   │   ├── learn/               # 学习
-│   │   ├── expert-personas/     # 专家人格 (AutoTheory)
-│   │   ├── theory-evolution/    # 理论进化 (AutoTheory)
-│   │   ├── tournament/          # 锦标赛 (Project APE)
-│   │   ├── code-review/         # 代码审查 (Project APE)
-│   │   └── replicate/           # 复制验证 (Project APE)
-│   ├── agents/                  # 智能体 (5个)
-│   │   ├── proofreader.md       # 校对员
-│   │   ├── domain-reviewer.md   # 领域审查员
-│   │   ├── math-auditor.md      # 数学审计员 (AutoTheory)
-│   │   ├── simulated-referee.md # 模拟审稿人 (AutoTheory)
-│   │   └── tournament-judge.md  # 锦标赛裁判 (Project APE)
+│   │   ├── code-review/         # 代码审查
+│   │   ├── replicate/           # 复制验证
+│   │   └── ...
+│   ├── agents/                  # 智能体 (9个)
+│   │   │                        # === AutoTheory Agents ===
+│   │   ├── math-auditor.md      # 数学审计员 (A.5)
+│   │   ├── simulated-referee.md # 模拟审稿人 (A.11)
+│   │   ├── pseudocode-agent.md  # 伪代码生成 (A.6)
+│   │   ├── pseudocode-reviewer.md # 伪代码审查 (A.7)
+│   │   ├── coding-agent.md      # 代码生成 (A.3)
+│   │   ├── code-reviewer.md     # 代码审查 (A.8)
+│   │   ├── calibration-agent.md # 校准参数 (A.4)
+│   │   │                        # === APE Agents ===
+│   │   └── tournament-judge.md  # 锦标赛裁判
+│   ├── prompts/                 # 原版提示词
+│   │   ├── autotheory-prompts.md # AutoTheory 所有提示词
+│   │   └── ape-prompts.md       # APE 所有提示词
 │   └── config/
-│       └── model-ensemble.yaml  # 多模型配置 (综合*)
+│       └── model-ensemble.yaml  # 多模型配置
+├── templates/
+│   └── ape-paper/               # APE 论文模板
+│       ├── PROMPT.md            # 研究问题定义
+│       ├── pre_analysis.md      # 预分析计划
+│       ├── ideas.md             # 研究想法模板
+│       ├── metadata.json        # 元数据架构
+│       └── REPLICATION.md       # 复制说明
+├── models/                      # 模型注册表
 └── quality_reports/             # 质量报告
 ```
 
@@ -174,14 +197,18 @@ WK-Workflow/
 | **评分维度** | Fit (50%), Plausibility (25%), Parsimony (25%) | "fit (50%)... plausibility (25%)... parsimony (25%)" |
 | **模拟审稿** | 模拟顶级期刊审稿人 | "referee LLM produces a final score and feedback" |
 
-#### 来自 Project APE 的组件
+#### 来自 Project APE 的组件 (完整实现)
 
 | 组件 | 说明 | 原始来源 |
 |------|------|----------|
 | **Tournament 系统** | 头对头比赛评估 | "Papers compete in head-to-head matches" |
-| **TrueSkill 评级** | 微软贝叶斯评级系统 | "Rankings use TrueSkill" |
+| **TrueSkill 评级** | 贝叶斯评级系统 (μ=25, σ=8.33) | "Rankings use TrueSkill" |
 | **位置交换** | 控制 LLM 位置偏差 | "run each comparison twice with papers swapped" |
-| **5个评估维度** | 识别策略、新颖性、政策相关性、执行质量、适当范围 | 来自评估提示 |
+| **5个评估维度** | 识别策略(30%)、新颖性(20%)、政策相关性(20%)、执行质量(20%)、适当范围(10%) | Tournament Judge Prompt |
+| **6阶段审稿流程** | Advisor→Theory→Exhibit→Prose→Referee→Revision | APE Methodology |
+| **代码完整性检查** | 代码扫描、数据验证、复制测试、预分析计划合规 | APE Integrity Pipeline |
+| **论文模板结构** | PROMPT.md, pre_analysis.md, metadata.json, REPLICATION.md | APE Paper Structure |
+| **No Self-Evaluation** | Judge 模型不能评估自己生成的论文 | APE Methodology |
 
 #### 本项目综合扩展 (*)
 
@@ -221,9 +248,11 @@ cd WK-Workflow
 
 **Project APE 技能:**
 ```
-/tournament [论文1] [论文2] # 头对头比较
-/code-review [脚本]        # 代码审查
-/replicate [分析]          # 复制验证
+/tournament [论文1] [论文2] # TrueSkill 头对头比较
+/ape-review [论文]          # 6阶段审稿流程
+/integrity-check [目录]     # 代码完整性检查
+/code-review [脚本]         # 代码审查
+/replicate [分析]           # 复制验证
 ```
 
 ### 质量评分体系
@@ -338,13 +367,17 @@ User Input → Plan-First → Orchestrator → Execute Loop → Output
 | **Scoring Dimensions** | Fit (50%), Plausibility (25%), Parsimony (25%) | Direct from paper |
 | **Simulated Referee** | Simulates top journal referee | "referee LLM produces a final score" |
 
-#### From Project APE
+#### From Project APE (Full Implementation)
 | Component | Description | Source |
 |-----------|-------------|--------|
 | **Tournament System** | Head-to-head paper comparison | "Papers compete in head-to-head matches" |
-| **TrueSkill Rating** | Microsoft Bayesian rating | "Rankings use TrueSkill" |
+| **TrueSkill Rating** | Bayesian rating (μ=25, σ=8.33) | "Rankings use TrueSkill" |
 | **Position Swapping** | Control for LLM position bias | "run each comparison twice with papers swapped" |
-| **5 Evaluation Dimensions** | Identification, Novelty, Policy, Execution, Scope | From evaluation prompt |
+| **5 Evaluation Dimensions** | Identification(30%), Novelty(20%), Policy(20%), Execution(20%), Scope(10%) | Tournament Judge Prompt |
+| **6-Stage Review** | Advisor→Theory→Exhibit→Prose→Referee→Revision | APE Methodology |
+| **Code Integrity Check** | Code scan, data verify, replication test, pre-analysis compliance | APE Integrity Pipeline |
+| **Paper Templates** | PROMPT.md, pre_analysis.md, metadata.json, REPLICATION.md | APE Paper Structure |
+| **No Self-Evaluation** | Judge model cannot evaluate papers it generated | APE Methodology |
 
 #### Synthesized Extensions (*)
 - **Key Questions for personas**: Heuristic questions based on persona characteristics
@@ -381,9 +414,11 @@ The workflow auto-loads from the `.cursor/` directory.
 
 **Project APE Skills:**
 ```
-/tournament [paper1] [paper2] # Head-to-head comparison
-/code-review [script]      # Automated code scan
-/replicate [analysis]      # Verify reproducibility
+/tournament [paper1] [paper2]  # TrueSkill head-to-head comparison
+/ape-review [paper]            # 6-stage review pipeline
+/integrity-check [directory]   # Code integrity check
+/code-review [script]          # Automated code scan
+/replicate [analysis]          # Verify reproducibility
 ```
 
 ### Credits
